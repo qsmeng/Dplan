@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>五一出行计划 - 太行山水之旅</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f9f9f9;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #1a6ba0);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .overview {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .overview-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .overview-item {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+            padding: 15px;
+            background-color: var(--light-bg);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 40px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 4px;
+            background-color: var(--primary-color);
+        }
+        
+        .day-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            margin-left: 45px;
+            position: relative;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .day-card::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            border: 4px solid white;
+        }
+        
+        .day-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .day-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+        
+        .day-date {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .day-route {
+            font-weight: bold;
+            margin-left: auto;
+            color: var(--accent-color);
+        }
+        
+        .schedule {
+            margin: 20px 0;
+        }
+        
+        .schedule-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .schedule-time {
+            flex: 0 0 140px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .schedule-content {
+            flex: 1;
+        }
+        
+        .notes {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .notes h4 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+        
+        .notes ul {
+            margin-left: 20px;
+        }
+        
+        .accommodation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border-left: 4px solid #03a9f4;
+        }
+        
+        .accommodation h4 {
+            color: #0288d1;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--light-bg);
+        }
+        
+        .weather-section, .emergency-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .weather-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .weather-header h2 {
+            margin: 0;
+        }
+        
+        .refresh-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .refresh-button:hover {
+            background-color: #2980b9;
+        }
+        
+        .refresh-button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .refresh-button svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .refresh-button.loading svg {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .weather-timestamp {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .weather-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .weather-date {
+            flex: 0 0 140px;
+            font-weight: bold;
+        }
+        
+        .weather-icon {
+            flex: 0 0 50px;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        
+        .weather-details {
+            flex: 1;
+        }
+        
+        .weather-temp {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .weather-condition {
+            margin-bottom: 5px;
+        }
+        
+        .weather-wind {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .weather-advice {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+        
+        .weather-loading {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .weather-error {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            border-left: 4px solid #c62828;
+        }
+        
+        .emergency-item {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .overview-item {
+                min-width: 100%;
+            }
+            
+            .day-route {
+                display: block;
+                margin-left: 0;
+                margin-top: 10px;
+            }
+            
+            .schedule-item {
+                flex-direction: column;
+            }
+            
+            .schedule-time {
+                margin-bottom: 5px;
+            }
+            
+            .timeline::before {
+                left: 10px;
+            }
+            
+            .day-card {
+                margin-left: 30px;
+            }
+            
+            .day-card::before {
+                left: -24px;
+                width: 16px;
+                height: 16px;
+            }
+            
+            .weather-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .weather-date, .weather-icon {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>五一出行计划</h1>
+            <p>太行山水之旅 · 2025年4月30日-5月2日</p>
+        </header>
+        
+        <section class="overview">
+            <h2>行程总览</h2>
+            <p>一场穿越太行山脉的三天两夜亲子之旅，领略北方山水之美</p>
+            
+            <div class="overview-details">
+                <div class="overview-item">
+                    <h3>行程路线</h3>
+                    <p>天津 → 保定易县（太行水镇） → 安阳林州（太行大峡谷桃花谷） → 禹州</p>
+                </div>
+                
+                <div class="overview-item">
+                    <h3>总里程</h3>
+                    <p>约350公里</p>
+                </div>
+                
+                <div class="overview-item">
+                    <h3>总预算</h3>
+                    <p>4500-7000元（含弹性）</p>
+                </div>
+                
+                <div class="overview-item">
+                    <h3>出行人员</h3>
+                    <p>2大1小+1大学生</p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="timeline">
+            <div class="day-card">
+                <div class="day-title">
+                    <div class="day-number">Day 1</div>
+                    <div class="day-date">4月30日，周四</div>
+                    <div class="day-route">天津 → 保定易县太行水镇</div>
+                </div>
+                
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <div class="schedule-time">12:00-15:00</div>
+                        <div class="schedule-content">
+                            <p>天津出发，沿 津保高速 → 京昆高速 行驶至易县（约220公里，2.5小时），导航定位"太行水镇停车场"（停车费10元/天）。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">15:00-19:00</div>
+                        <div class="schedule-content">
+                            <p>游览 太行水镇（免费）：</p>
+                            <ul>
+                                <li>15:00-17:00：漫步古街，体验扎染、磨豆腐等非遗手作（人均30元），推荐品尝驴肉火烧、缸炉烧饼（人均50元）。</li>
+                                <li>17:00-18:30：易水湖环湖栈道轻徒步（免费区域），推婴儿车观湖景，避免乘船（2岁幼儿易晕船）。</li>
+                                <li>18:30-19:00：驱车至易县县城住宿（车程15分钟）。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accommodation">
+                    <h4>住宿建议</h4>
+                    <p>易县亲子民宿（如"听水山居"），2间房约500元/晚，含早餐及儿童玩具。</p>
+                </div>
+                
+                <div class="notes">
+                    <h4>注意事项</h4>
+                    <ul>
+                        <li>易县4月底为杨柳絮高发期，备儿童口罩、护目镜防过敏。</li>
+                        <li>太行水镇餐饮价格较高，可自备零食（如儿童果泥、饼干）。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-title">
+                    <div class="day-number">Day 2</div>
+                    <div class="day-date">5月1日，周五</div>
+                    <div class="day-route">易县 → 安阳林州太行大峡谷桃花谷</div>
+                </div>
+                
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <div class="schedule-time">8:00-12:00</div>
+                        <div class="schedule-content">
+                            <p>驱车至林州太行大峡谷（约300公里，4小时），导航定位"桃花谷景区停车场"。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">12:00-18:00</div>
+                        <div class="schedule-content">
+                            <p>游览 桃花谷景区（门票80元/人，儿童免费）：</p>
+                            <ul>
+                                <li>12:00-14:00：景区入口乘观光车至 黄龙潭，沿步云栈道徒步（平缓路段），观赏飞龙峡瀑布、九连瀑群（推车友好）。</li>
+                                <li>14:00-15:30：桃花谷民俗广场休整，体验农家午餐（推荐小米焖饭+山韭菜炒蛋，人均40元）。</li>
+                                <li>15:30-17:30：亲子戏水活动（浅滩捞鱼、玩水枪），自备儿童防水裤和渔网。</li>
+                                <li>17:30-18:00：乘观光车返回停车场，驱车至林州市区住宿（车程40分钟）。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accommodation">
+                    <h4>住宿建议</h4>
+                    <p>林州市区亲子酒店（如"林州国际酒店"），2间房约600元/晚，含早餐及儿童游乐区。</p>
+                </div>
+                
+                <div class="notes">
+                    <h4>注意事项</h4>
+                    <ul>
+                        <li>桃花谷步道狭窄，避开10:00-14:00人流高峰，优先选择背风路段。</li>
+                        <li>山区温差大，备儿童防风外套和防晒帽。</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="day-card">
+                <div class="day-title">
+                    <div class="day-number">Day 3</div>
+                    <div class="day-date">5月2日，周六</div>
+                    <div class="day-route">林州 → 禹州</div>
+                </div>
+                
+                <div class="schedule">
+                    <div class="schedule-item">
+                        <div class="schedule-time">8:00-10:00</div>
+                        <div class="schedule-content">
+                            <p>退房后驱车至禹州（约150公里，2小时），选择 郑栾高速（车流较少），预留0.5小时服务区休整。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:00-12:00</div>
+                        <div class="schedule-content">
+                            <p>抵达禹州后推荐活动：</p>
+                            <ul>
+                                <li>神垕古镇（免费）：体验钧瓷手作（人均50元），适合全家互动。</li>
+                                <li>白沙湖野餐（自备食材），儿童湖边玩沙戏水（免费）。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="budget-section">
+            <h2>费用优化与弹性控制</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>明细（2大1小+1大学生）</th>
+                        <th>预算</th>
+                        <th>弹性预留</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>交通（油费+高速）</td>
+                        <td>约700公里×0.8元/公里</td>
+                        <td>560元</td>
+                        <td>+200元</td>
+                    </tr>
+                    <tr>
+                        <td>住宿（2间×2晚）</td>
+                        <td>易县+林州</td>
+                        <td>1100元</td>
+                        <td>+400元</td>
+                    </tr>
+                    <tr>
+                        <td>餐饮</td>
+                        <td>正餐+零食（含特色餐）</td>
+                        <td>1200元</td>
+                        <td>+300元</td>
+                    </tr>
+                    <tr>
+                        <td>门票及体验</td>
+                        <td>桃花谷门票+手作体验</td>
+                        <td>360元</td>
+                        <td>+150元</td>
+                    </tr>
+                    <tr>
+                        <td>其他（应急物资）</td>
+                        <td>防滑链、儿童药品</td>
+                        <td>280元</td>
+                        <td>+200元</td>
+                    </tr>
+                    <tr>
+                        <td><strong>总计</strong></td>
+                        <td></td>
+                        <td><strong>约3500元</strong></td>
+                        <td><strong>上限7000元</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="weather-section">
+            <div class="weather-header">
+                <h2>天气预报与行程调整建议</h2>
+                <button id="refresh-weather" class="refresh-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 4v6h-6"></path>
+                        <path d="M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"></path>
+                        <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"></path>
+                    </svg>
+                    <span>刷新天气</span>
+                </button>
+            </div>
+            <div id="weather-timestamp" class="weather-timestamp"></div>
+            
+            <div id="weather-container">
+                <!-- Weather data will be loaded here -->
+                <div class="weather-loading">正在加载天气数据...</div>
+            </div>
+        </section>
+        
+        <section class="emergency-section">
+            <h2>应急预案与替代景点</h2>
+            
+            <div class="emergency-item">
+                <h3>易县大风</h3>
+                <p>改至 清西陵景区（距水镇15公里，门票80元），参观清代皇家陵寝，推车友好。</p>
+            </div>
+            
+            <div class="emergency-item">
+                <h3>桃花谷拥堵</h3>
+                <p>调整至 王相岩景区（含在门票内），徒步强度较大，需评估幼儿体力。</p>
+            </div>
+            
+            <p>如需进一步调整行程细节或获取实时路况，可通过 河南气象局公众号 或 高速12122热线 查询。</p>
+        </section>
+        
+        <footer>
+            <p>行程计划最后更新时间：<span id="last-updated">2025年4月24日</span></p>
+            <p>愿您的五一出行之旅愉快而难忘！</p>
+        </footer>
+    </div>
+
+    <script>
+        // 天气数据和行程建议
+        const locations = [
+            { 
+                name: '易县', 
+                date: '4月30日', 
+                coords: { lat: 39.3494, lon: 115.4974 },
+                generateAdvice: function(weather) {
+                    let advice = '';
+                    
+                    if (weather.wind_speed > 5) {
+                        advice += `风力较大(${weather.wind_speed}级)，需关闭车窗，杨柳絮浓度可能较高。`;
+                    }
+                    
+                    if (weather.temp_max > 28) {
+                        advice += ' 气温较高，注意防晒和补充水分。';
+                    } else if (weather.temp_min < 10) {
+                        advice += ' 早晚温差大，建议携带保暖外套。';
+                    }
+                    
+                    if (weather.condition.includes('雨')) {
+                        advice += ' 有降水，建议改为参观清西陵景区（室内景点较多）。';
+                    }
+                    
+                    return advice || '天气适宜出行，按原计划进行。';
+                }
+            },
+            { 
+                name: '林州', 
+                date: '5月1日', 
+                coords: { lat: 36.0625, lon: 113.8159 },
+                generateAdvice: function(weather) {
+                    let advice = '';
+                    
+                    if (weather.wind_speed > 6) {
+                        advice += `山区风力较大(${weather.wind_speed}级)，建议避开悬空栈道，选择背风路线。`;
+                    }
+                    
+                    if (weather.condition.includes('雨')) {
+                        advice += ' 有降水，桃花谷路滑，建议更换为王相岩景区（有更多遮雨设施）。';
+                    }
+                    
+                    if (weather.temp_max - weather.temp_min > 10) {
+                        advice += ' 山区温差大，备儿童防风外套和保暖衣物。';
+                    }
+                    
+                    return advice || '天气适宜出行，按原计划进行。';
+                }
+            },
+            { 
+                name: '禹州', 
+                date: '5月2日', 
+                coords: { lat: 34.1404, lon: 113.4880 },
+                generateAdvice: function(weather) {
+                    let advice = '';
+                    
+                    if (weather.condition.includes('雨')) {
+                        advice += ' 有降水，野餐活动建议改至钧官窑址博物馆（室内）。';
+                    }
+                    
+                    if (weather.temp_max > 30) {
+                        advice += ' 气温较高，白沙湖活动建议提前至上午进行，避开高温时段。';
+                    }
+                    
+                    if (weather.wind_speed > 4) {
+                        advice += ` 风力${weather.wind_speed}级，户外活动注意防风。`;
+                    }
+                    
+                    return advice || '天气适宜出行，按原计划进行。';
+                }
+            }
+        ];
+
+        // 天气图标映射
+        const weatherIcons = {
+            'clear': '☀️',
+            'sunny': '☀️',
+            'partly cloudy': '⛅',
+            'cloudy': '☁️',
+            'overcast': '☁️',
+            'rain': '🌧️',
+            'light rain': '🌦️',
+            'moderate rain': '🌧️',
+            'heavy rain': '⛈️',
+            'thunderstorm': '⛈️',
+            'snow': '❄️',
+            'fog': '🌫️',
+            'mist': '🌫️',
+            'haze': '🌫️',
+            'windy': '💨'
+        };
+
+        // 获取天气图标
+        function getWeatherIcon(condition) {
+            condition = condition.toLowerCase();
+            for (const [key, icon] of Object.entries(weatherIcons)) {
+                if (condition.includes(key)) {
+                    return icon;
+                }
+            }
+            return '🌈'; // 默认图标
+        }
+
+        // 格式化日期时间
+        function formatDateTime(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            
+            return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+        }
+
+        // 模拟天气API请求
+        async function fetchWeatherData(location) {
+            // 在实际应用中，这里应该调用真实的天气API
+            // 例如：const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.lat}&lon=${location.coords.lon}&appid=YOUR_API_KEY&units=metric&lang=zh_cn`);
+            
+            // 模拟API延迟
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // 生成随机天气数据用于演示
+            const conditions = ['晴', '多云', '阴', '小雨', '晴转多云', '多云转晴'];
+            const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+            
+            const minTemp = Math.floor(Math.random() * 10) + 10; // 10-20°C
+            const maxTemp = minTemp + Math.floor(Math.random() * 10) + 5; // minTemp + 5-15°C
+            const windSpeed = Math.floor(Math.random() * 10) + 1; // 1-10级
+            
+            return {
+                location: location.name,
+                date: location.date,
+                condition: randomCondition,
+                temp_min: minTemp,
+                temp_max: maxTemp,
+                wind_speed: windSpeed,
+                humidity: Math.floor(Math.random() * 40) + 30, // 30-70%
+                timestamp: new Date()
+            };
+        }
+
+        // 更新天气显示
+        async function updateWeatherDisplay() {
+            const weatherContainer = document.getElementById('weather-container');
+            const timestampElement = document.getElementById('weather-timestamp');
+            const refreshButton = document.getElementById('refresh-weather');
+            const lastUpdatedElement = document.getElementById('last-updated');
+            
+            // 显示加载状态
+            refreshButton.disabled = true;
+            refreshButton.classList.add('loading');
+            weatherContainer.innerHTML = '<div class="weather-loading">正在加载天气数据...</div>';
+            
+            try {
+                // 获取所有地点的天气数据
+                const weatherPromises = locations.map(location => fetchWeatherData(location));
+                const weatherData = await Promise.all(weatherPromises);
+                
+                // 更新时间戳
+                const now = new Date();
+                timestampElement.textContent = `（数据更新时间：${formatDateTime(now)}）`;
+                lastUpdatedElement.textContent = formatDateTime(now);
+                
+                // 清空容器
+                weatherContainer.innerHTML = '';
+                
+                // 为每个地点创建天气项
+                weatherData.forEach(data => {
+                    const location = locations.find(loc => loc.name === data.location);
+                    const advice = location.generateAdvice(data);
+                    
+                    const weatherItem = document.createElement('div');
+                    weatherItem.className = 'weather-item';
+                    weatherItem.innerHTML = `
+                        <div class="weather-date">${data.date}（${data.location}）</div>
+                        <div class="weather-icon">${getWeatherIcon(data.condition)}</div>
+                        <div class="weather-details">
+                            <div class="weather-temp">${data.temp_min}-${data.temp_max}℃</div>
+                            <div class="weather-condition">${data.condition}，湿度${data.humidity}%</div>
+                            <div class="weather-wind">风力${data.wind_speed}级</div>
+                            <div class="weather-advice">${advice}</div>
+                        </div>
+                    `;
+                    
+                    weatherContainer.appendChild(weatherItem);
+                });
+            } catch (error) {
+                console.error('获取天气数据失败:', error);
+                weatherContainer.innerHTML = `
+                    <div class="weather-error">
+                        <p>获取天气数据失败，请稍后再试。</p>
+                        <p>错误信息: ${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                // 恢复按钮状态
+                refreshButton.disabled = false;
+                refreshButton.classList.remove('loading');
+            }
+        }
+
+        // 页面加载时获取天气数据
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化天气数据
+            updateWeatherDisplay();
+            
+            // 添加刷新按钮事件监听器
+            const refreshButton = document.getElementById('refresh-weather');
+            refreshButton.addEventListener('click', updateWeatherDisplay);
+            
+            // 设置自动刷新（每30分钟）
+            setInterval(updateWeatherDisplay, 30 * 60 * 1000);
+        });
+    </script>
+</body>
+</html>
